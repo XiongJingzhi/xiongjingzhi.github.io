@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/icon.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/icon.png">
+  <link rel="mask-icon" href="/images/icon.png" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"xiongjingzhi.com","root":"/","scheme":"Mist","version":"7.8.0","exturl":false,"sidebar":{"position":"right","display":"hide","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"appID":"MOW8LSDU04","apiKey":"38643437c31267d7e9cfdf90af50983b","indexName":"prod_NAME","hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="jQuery 结构jQuery version 1.3 2.2 jQuery的设计哲学：write less, do more. 在browser端，引入即可使用。  一切皆对象，jQuery也是对象 jQuery 是一个不需要new的普通函数 jQuery 返回jQuery对象最基本构造函数方式1234567891011var $ &#x3D; jQuery &#x3D; function() &amp;#123;  &#x2F;&#x2F;">
+<meta property="og:type" content="article">
+<meta property="og:title" content="jQuery源码解析(一)">
+<meta property="og:url" content="https://xiongjingzhi.com/2018/07/01/jQuery%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90-%E4%B8%80/index.html">
+<meta property="og:site_name" content="熊敬之">
+<meta property="og:description" content="jQuery 结构jQuery version 1.3 2.2 jQuery的设计哲学：write less, do more. 在browser端，引入即可使用。  一切皆对象，jQuery也是对象 jQuery 是一个不需要new的普通函数 jQuery 返回jQuery对象最基本构造函数方式1234567891011var $ &#x3D; jQuery &#x3D; function() &amp;#123;  &#x2F;&#x2F;">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2018-07-01T21:58:32.000Z">
+<meta property="article:modified_time" content="2021-01-04T09:08:18.957Z">
+<meta property="article:author" content="熊敬之">
+<meta property="article:tag" content="front-end">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://xiongjingzhi.com/2018/07/01/jQuery%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90-%E4%B8%80/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+  <title>jQuery源码解析(一) | 熊敬之</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">熊敬之</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+        <li class="menu-item menu-item-books">
+
+    <a href="/books" rel="section"><i class="fa fa-book fa-fw"></i>books</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://xiongjingzhi.com/2018/07/01/jQuery%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90-%E4%B8%80/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="熊敬之">
+      <meta itemprop="description" content="日就月将，学有缉熙于光明。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="熊敬之">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          jQuery源码解析(一)
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2018-07-01 21:58:32" itemprop="dateCreated datePublished" datetime="2018-07-01T21:58:32+00:00">2018-07-01</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2021-01-04 09:08:18" itemprop="dateModified" datetime="2021-01-04T09:08:18+00:00">2021-01-04</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="jQuery-结构"><a href="#jQuery-结构" class="headerlink" title="jQuery 结构"></a>jQuery 结构</h1><p><code>jQuery version 1.3 2.2</code></p>
+<p>jQuery的设计哲学：write less, do more. 在browser端，引入即可使用。</p>
+<ul>
+<li>一切皆对象，jQuery也是对象</li>
+<li>jQuery 是一个不需要new的普通函数</li>
+<li>jQuery 返回jQuery对象<h2 id="最基本构造函数方式"><a href="#最基本构造函数方式" class="headerlink" title="最基本构造函数方式"></a>最基本构造函数方式</h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> $ = jQuery = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="comment">// todo</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 别名</span></span><br><span class="line">jQuery.fn = jQuery.prototype = &#123;</span><br><span class="line">  <span class="comment">// 扩展原型对象</span></span><br><span class="line">  method: todofunction,</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//使用</span></span><br><span class="line"><span class="keyword">var</span> $instance = <span class="keyword">new</span> $()</span><br><span class="line">$instance.method()</span><br></pre></td></tr></table></figure>
+这是一般生成对象方式，需要实例化，使用时需声明变量，用起来麻烦。</li>
+</ul>
+<h2 id="去掉外部new"><a href="#去掉外部new" class="headerlink" title="去掉外部new"></a>去掉外部new</h2><p>第一个想法要去掉外部的new，直接<code>return jQuery()</code>，必然会出现无限循环。<br>因此，可以<code>return jQuery.init()</code>。<br>但是，同时考虑返回的jQuery对象需要有<code>jQuery.prototype</code>里的属性方法。<br><code>return jQuery.prototype.init()</code></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> $ = jQuery = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="comment">// new 返回实例化jQuery对象</span></span><br><span class="line">  <span class="keyword">return</span> jQuery.prototype.init()</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 别名，对象方法属性</span></span><br><span class="line">jQuery.fn = jQuery.prototype = &#123;</span><br><span class="line">  <span class="comment">// 扩展原型对象</span></span><br><span class="line">  init: <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">this</span></span><br><span class="line">  &#125;,</span><br><span class="line">  method: todofunction,</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//使用</span></span><br><span class="line"><span class="keyword">var</span> $instance = $()</span><br><span class="line">$instance.method()</span><br></pre></td></tr></table></figure>
+<p>上述方式，init里this属性将覆盖掉外部属性，返回的jQuery对象将公用一条作用链，破坏作用域的独立性。<br>需要将jQuery.prototype.init()作用域独立出来，即<code>return new jQuery.prototype.init()</code></p>
+<h3 id="重新建立连接，跨域访问"><a href="#重新建立连接，跨域访问" class="headerlink" title="重新建立连接，跨域访问"></a>重新建立连接，跨域访问</h3><p>决定用<code>return new jQuery.prototype.init()</code>，便要考虑如何访问<code>jQuery.prototype</code>的属性。<br>方法便是覆盖，重新建立连接。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> $ = jQuery = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="comment">// new 返回实例化jQuery对象</span></span><br><span class="line">  <span class="keyword">return</span> <span class="keyword">new</span> jQuery.prototype.init()</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 别名, 对象方法属性</span></span><br><span class="line">jQuery.fn = jQuery.prototype = &#123;</span><br><span class="line">  <span class="comment">// 扩展原型对象</span></span><br><span class="line">  init: <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">this</span></span><br><span class="line">  &#125;,</span><br><span class="line">  method: todofunction,</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 覆盖,重新建立连接</span></span><br><span class="line">jQuery.prototype.init.prototype = jQuery.fn</span><br><span class="line"><span class="comment">//使用</span></span><br><span class="line"><span class="keyword">var</span> $instance = $()</span><br><span class="line">$instance.method()</span><br></pre></td></tr></table></figure>
+<p>如此一来，new出来的jQuery对象，<strong>prototype</strong> 便指向 $.prototype。<br>jQuery对象便继承了jQuery.fn的方法。</p>
+<h2 id="避免全局污染"><a href="#避免全局污染" class="headerlink" title="避免全局污染"></a>避免全局污染</h2><p>直接写成代码块的形式显然不合适。<br>这里采用了立即调用函数的方式进行封装，同时将window当做参数传入，减少变量链的长度。<br>传入形参undefined，是因为在早期ECMA标准中，undefined不是关键字，可是重写。为了避免这个因素，undefined当做形参，不传入实参，undefined 就等于真的undefined。防止了重写。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">(<span class="function"><span class="keyword">function</span>(<span class="params"><span class="built_in">window</span>, <span class="literal">undefined</span></span>) </span>&#123;</span><br><span class="line">    <span class="comment">// 对外暴露的工厂函数</span></span><br><span class="line">    <span class="function"><span class="keyword">function</span> <span class="title">jQuery</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> jQuery.fn.init();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// 给原型提供一个简写方式</span></span><br><span class="line">    jQuery.fn = jQuery.prototype = &#123;</span><br><span class="line">        constrcutor: jQuery</span><br><span class="line">    &#125;;</span><br><span class="line">    <span class="comment">// init是jQuery中真正的构造函数 ==&gt; 入口函数</span></span><br><span class="line">    <span class="keyword">var</span> init = jQuery.fn.init = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    &#125;;</span><br><span class="line">    <span class="comment">// 替换构造函数的原型 为 jQuery工厂的原型</span></span><br><span class="line">    <span class="comment">// 为了实现插件机制，让外界可以透过jQuery.fn扩充方法。</span></span><br><span class="line">    init.prototype = jQuery.fn;</span><br><span class="line">    <span class="comment">// 把工厂通过两个变量暴露出去</span></span><br><span class="line">    w.jQuery = w.$ = jQuery;</span><br><span class="line">&#125;(<span class="built_in">window</span>));</span><br></pre></td></tr></table></figure>
+<p>为了兼容Node.js，可以在这个外面包一层<code>(function( global, factory )</code>,用于判断所处环境。</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/front-end/" rel="tag"># front-end</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2018/06/26/%E9%9A%94%E7%BB%9D%E6%98%AF%E6%B3%A8%E5%AE%9A%E7%9A%84%EF%BC%8C%E7%A6%8F%E6%8A%A5%E6%81%B6%E6%8A%A5%E7%9A%86%E6%98%AF%E5%BF%83%E7%94%9F%E3%80%82/" rel="prev" title="隔绝是注定的，福报恶报皆是心生。">
+      <i class="fa fa-chevron-left"></i> 隔绝是注定的，福报恶报皆是心生。
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2018/08/02/HTML5-%E6%8B%96%E6%9B%B3%E4%B8%8A%E4%BC%A0/" rel="next" title="HTML5 拖曳上传">
+      HTML5 拖曳上传 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#jQuery-%E7%BB%93%E6%9E%84"><span class="nav-number">1.</span> <span class="nav-text">jQuery 结构</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9C%80%E5%9F%BA%E6%9C%AC%E6%9E%84%E9%80%A0%E5%87%BD%E6%95%B0%E6%96%B9%E5%BC%8F"><span class="nav-number">1.1.</span> <span class="nav-text">最基本构造函数方式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8E%BB%E6%8E%89%E5%A4%96%E9%83%A8new"><span class="nav-number">1.2.</span> <span class="nav-text">去掉外部new</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%87%8D%E6%96%B0%E5%BB%BA%E7%AB%8B%E8%BF%9E%E6%8E%A5%EF%BC%8C%E8%B7%A8%E5%9F%9F%E8%AE%BF%E9%97%AE"><span class="nav-number">1.2.1.</span> <span class="nav-text">重新建立连接，跨域访问</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%81%BF%E5%85%8D%E5%85%A8%E5%B1%80%E6%B1%A1%E6%9F%93"><span class="nav-number">1.3.</span> <span class="nav-text">避免全局污染</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="熊敬之"
+      src="/images/avatar.jpg">
+  <p class="site-author-name" itemprop="name">熊敬之</p>
+  <div class="site-description" itemprop="description">日就月将，学有缉熙于光明。</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives">
+        
+          <span class="site-state-item-count">28</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags">
+          
+        <span class="site-state-item-count">11</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/xiongjingzhi" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;xiongjingzhi" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://twitter.com/XiongJingzhi" title="Twitter → https:&#x2F;&#x2F;twitter.com&#x2F;XiongJingzhi" rel="noopener" target="_blank"><i class="fab fa-twitter fa-fw"></i>Twitter</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://space.bilibili.com/5709931" title="Bilibili → https:&#x2F;&#x2F;space.bilibili.com&#x2F;5709931" rel="noopener" target="_blank"><i class="fas fa-blog fa-fw"></i>Bilibili</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://www.zhihu.com/people/dengxianbaitou" title="Zhihu → https:&#x2F;&#x2F;www.zhihu.com&#x2F;people&#x2F;dengxianbaitou" rel="noopener" target="_blank"><i class="fab fa-zhihu fa-fw"></i>Zhihu</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://www.yuque.com/jingzhi-knq0o" title="语雀 → https:&#x2F;&#x2F;www.yuque.com&#x2F;jingzhi-knq0o" rel="noopener" target="_blank"><i class="fas fa-link fa-fw"></i>语雀</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://juejin.cn/user/78820567684077" title="掘金 → https:&#x2F;&#x2F;juejin.cn&#x2F;user&#x2F;78820567684077" rel="noopener" target="_blank"><i class="fas fa-link fa-fw"></i>掘金</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://segmentfault.com/u/davidxiong" title="Segmentfault → https:&#x2F;&#x2F;segmentfault.com&#x2F;u&#x2F;davidxiong" rel="noopener" target="_blank"><i class="fas fa-link fa-fw"></i>Segmentfault</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 2017 – 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">熊敬之</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://mist.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Mist</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

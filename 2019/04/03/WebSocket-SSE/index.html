@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/icon.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/icon.png">
+  <link rel="mask-icon" href="/images/icon.png" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"xiongjingzhi.com","root":"/","scheme":"Mist","version":"7.8.0","exturl":false,"sidebar":{"position":"right","display":"hide","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"appID":"MOW8LSDU04","apiKey":"38643437c31267d7e9cfdf90af50983b","indexName":"prod_NAME","hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="WebSockets  ws 协议 解决问题 解决问题：因为HTTP协议是一个client-&gt;请求-&gt;响应-&gt;client协议，所以原有实现，实时聊天，多人在线等即时通讯只能hack：Ajax短轮询或者Comet。   轮询：指浏览器通过JavaScript启动一个定时器，然后以固定的间隔给服务器发AJax请求，询问服务器有没有新消息。 comet: Comet本质上也是轮询，但">
+<meta property="og:type" content="article">
+<meta property="og:title" content="WebSockets &amp;&amp; SEE">
+<meta property="og:url" content="https://xiongjingzhi.com/2019/04/03/WebSocket-SSE/index.html">
+<meta property="og:site_name" content="熊敬之">
+<meta property="og:description" content="WebSockets  ws 协议 解决问题 解决问题：因为HTTP协议是一个client-&gt;请求-&gt;响应-&gt;client协议，所以原有实现，实时聊天，多人在线等即时通讯只能hack：Ajax短轮询或者Comet。   轮询：指浏览器通过JavaScript启动一个定时器，然后以固定的间隔给服务器发AJax请求，询问服务器有没有新消息。 comet: Comet本质上也是轮询，但">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2019-04-03T10:11:37.000Z">
+<meta property="article:modified_time" content="2021-01-04T09:08:18.957Z">
+<meta property="article:author" content="熊敬之">
+<meta property="article:tag" content="front-end back-end">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://xiongjingzhi.com/2019/04/03/WebSocket-SSE/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+  <title>WebSockets && SEE | 熊敬之</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">熊敬之</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+        <li class="menu-item menu-item-books">
+
+    <a href="/books" rel="section"><i class="fa fa-book fa-fw"></i>books</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://xiongjingzhi.com/2019/04/03/WebSocket-SSE/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="熊敬之">
+      <meta itemprop="description" content="日就月将，学有缉熙于光明。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="熊敬之">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          WebSockets && SEE
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2019-04-03 10:11:37" itemprop="dateCreated datePublished" datetime="2019-04-03T10:11:37+00:00">2019-04-03</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2021-01-04 09:08:18" itemprop="dateModified" datetime="2021-01-04T09:08:18+00:00">2021-01-04</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="WebSockets"><a href="#WebSockets" class="headerlink" title="WebSockets"></a>WebSockets</h2><p>  ws 协议</p>
+<h3 id="解决问题"><a href="#解决问题" class="headerlink" title="解决问题"></a>解决问题</h3><ul>
+<li>解决问题：因为HTTP协议是一个client-&gt;请求-&gt;响应-&gt;client协议，所以原有实现，实时聊天，多人在线等即时通讯只能hack：Ajax短轮询或者Comet。</li>
+</ul>
+<ol>
+<li>轮询：指浏览器通过JavaScript启动一个定时器，然后以固定的间隔给服务器发AJax请求，询问服务器有没有新消息。</li>
+<li>comet: Comet本质上也是轮询，但是在没有消息的情况下，服务器先拖一段时间，等到有消息了再回复。<ul>
+<li>基于Ajax的长轮询（long-polling）方式：<br>浏览器发出XMLHttpRequest 请求，服务器端接收到请求后，会阻塞请求直到有数据或者超时才返回，浏览器JS在处理请求返回信息（超时或有效数据）后再次发出请求，重新建立连接。在此期间服务器端可能已经有新的数据到达，服务器会选择把数据保存，直到重新建立连接，浏览器会把所有数据一次性取回</li>
+<li>基于 Iframe 及 htmlfile 的流（http streaming）方式<br>Iframe是html标记，这个标记的src属性会保持对指定服务器的长连接请求，服务器端则可以不停地返回数据，相对于第一种方式，这种方式跟传统的服务器推则更接近</li>
+</ul>
+</li>
+</ol>
+<ul>
+<li>WebSockets用途：它可以在用户的浏览器和服务器之间打开交互式通信会话。</li>
+</ul>
+<h3 id="API实现"><a href="#API实现" class="headerlink" title="API实现"></a>API实现</h3><h4 id="socket-client端"><a href="#socket-client端" class="headerlink" title="socket client端"></a>socket client端</h4><pre><code><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> socket = <span class="keyword">new</span> WebSocket(<span class="string">&#x27;ws://localhost:3000/path/any&#x27;</span>)</span><br><span class="line"><span class="comment">// Connection opened</span></span><br><span class="line">socket.addEventListener(<span class="string">&#x27;open&#x27;</span>, <span class="function"><span class="keyword">function</span> (<span class="params">event</span>) </span>&#123;</span><br><span class="line">  <span class="comment">// send data</span></span><br><span class="line">  socket.send(<span class="string">&#x27;Hello Server!&#x27;</span>)</span><br><span class="line">&#125;)</span><br><span class="line"><span class="comment">// Listen for messages</span></span><br><span class="line">socket.addEventListener(<span class="string">&#x27;message&#x27;</span>, <span class="function"><span class="keyword">function</span> (<span class="params">event</span>) </span>&#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">&#x27;Message from server &#x27;</span>, event.data)</span><br><span class="line">&#125;)</span><br><span class="line"><span class="comment">// connection close</span></span><br><span class="line">WebSocket.close([code[, reason]])</span><br><span class="line">WebSocket.addEventListener(<span class="string">&#x27;close&#x27;</span>, <span class="function"><span class="keyword">function</span> (<span class="params">event</span>) </span>&#123;</span><br><span class="line"></span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+1. new WebSocket 建立链接
+2. open之后send发送数据
+3. addEventListener(&#39;message&#39;)用于指定当从服务器接受到信息时的回调函数
+4. 可以手动关闭close addEventListener(&#39;close&#39;) 处理关闭的回调函数</code></pre>
+<h4 id="node端"><a href="#node端" class="headerlink" title="node端"></a>node端</h4>  <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> WebSocket = <span class="built_in">require</span>(<span class="string">&#x27;ws&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> WebSocketServer = WebSocket.Server</span><br><span class="line"></span><br><span class="line"><span class="comment">// 实例化:</span></span><br><span class="line"><span class="keyword">const</span> wss = <span class="keyword">new</span> WebSocketServer(&#123;</span><br><span class="line">  port: <span class="number">3000</span></span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line">wss.on(<span class="string">&#x27;connection&#x27;</span>, <span class="function"><span class="keyword">function</span>(<span class="params">ws</span>) </span>&#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">`[SERVER] connection()`</span>)</span><br><span class="line">  ws.on(<span class="string">&#x27;message&#x27;</span>, <span class="function"><span class="keyword">function</span>(<span class="params">message</span>) </span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">`[SERVER] Received: <span class="subst">$&#123;message&#125;</span>`</span>)</span><br><span class="line">    ws.send(<span class="string">`ECHO: <span class="subst">$&#123;message&#125;</span>`</span>, <span class="function">(<span class="params">err</span>) =&gt;</span> &#123;</span><br><span class="line">      <span class="keyword">if</span> (err) &#123;</span><br><span class="line">        <span class="built_in">console</span>.log(<span class="string">`[SERVER] error: <span class="subst">$&#123;err&#125;</span>`</span>)</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;)</span><br><span class="line">  &#125;)</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+<ol start="0">
+<li><a target="_blank" rel="noopener" href="https://www.npmjs.com/package/ws">wx</a></li>
+<li>使用ws的WebSocketServer, 建立服务监控</li>
+<li>connection -&gt; message</li>
+<li>ws.send(data), 发送数据</li>
+</ol>
+<h2 id="SEE-Server-Sent-Event"><a href="#SEE-Server-Sent-Event" class="headerlink" title="SEE(Server-Sent Event)"></a>SEE(Server-Sent Event)</h2><ul>
+<li>SSE能在现有的HTTP/HTTPS协议上运作，所以它能直接运行于现有的代理服务器和认证技术。</li>
+<li>SSE服务器向客户端声明，接下来要发送的是流信息。本质上，这种通信就是以流信息的方式，完成一次用时很长的下载。</li>
+</ul>
+<h3 id="API实现-1"><a href="#API实现-1" class="headerlink" title="API实现"></a>API实现</h3><h4 id="client端"><a href="#client端" class="headerlink" title="client端"></a>client端</h4>  <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 判断是否支持</span></span><br><span class="line"><span class="keyword">if</span> (<span class="string">&#x27;EventSource&#x27;</span> <span class="keyword">in</span> <span class="built_in">window</span>) &#123;</span><br><span class="line">  <span class="comment">// 建立链接, 跨域带凭证</span></span><br><span class="line">  <span class="keyword">var</span> source = <span class="keyword">new</span> EventSource(url[, withCredentials: <span class="literal">true</span>])</span><br><span class="line">  </span><br><span class="line">  <span class="keyword">var</span> div = <span class="built_in">document</span>.getElementById(<span class="string">&#x27;example&#x27;</span>)</span><br><span class="line">  </span><br><span class="line">  source.onopen = <span class="function"><span class="keyword">function</span> (<span class="params">event</span>) </span>&#123;</span><br><span class="line">    div.innerHTML += <span class="string">&#x27;&lt;p&gt;Connection open ...&lt;/p&gt;&#x27;</span></span><br><span class="line">  &#125;</span><br><span class="line">  </span><br><span class="line">  source.onerror = <span class="function"><span class="keyword">function</span> (<span class="params">event</span>) </span>&#123;</span><br><span class="line">    div.innerHTML += <span class="string">&#x27;&lt;p&gt;Connection close.&lt;/p&gt;&#x27;</span></span><br><span class="line">  &#125;</span><br><span class="line">  </span><br><span class="line">  source.addEventListener(<span class="string">&#x27;connecttime&#x27;</span>, <span class="function"><span class="keyword">function</span> (<span class="params">event</span>) </span>&#123;</span><br><span class="line">    div.innerHTML += (<span class="string">&#x27;&lt;p&gt;Start time: &#x27;</span> + event.data + <span class="string">&#x27;&lt;/p&gt;&#x27;</span>)</span><br><span class="line">  &#125;, <span class="literal">false</span>)</span><br><span class="line">  </span><br><span class="line">  source.onmessage = <span class="function"><span class="keyword">function</span> (<span class="params">event</span>) </span>&#123;</span><br><span class="line">    div.innerHTML += (<span class="string">&#x27;&lt;p&gt;Ping: &#x27;</span> + event.data + <span class="string">&#x27;&lt;/p&gt;&#x27;</span>)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="node端-1"><a href="#node端-1" class="headerlink" title="node端"></a>node端</h4>  <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> http = <span class="built_in">require</span>(<span class="string">&quot;http&quot;</span>);</span><br><span class="line"></span><br><span class="line">http.createServer(<span class="function"><span class="keyword">function</span> (<span class="params">req, res</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">var</span> fileName = <span class="string">&quot;.&quot;</span> + req.url;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span> (fileName === <span class="string">&quot;./stream&quot;</span>) &#123;</span><br><span class="line">    res.writeHead(<span class="number">200</span>, &#123;</span><br><span class="line">      <span class="comment">// 关键在这里，SSE声明</span></span><br><span class="line">      <span class="string">&quot;Content-Type&quot;</span>:<span class="string">&quot;text/event-stream&quot;</span>,</span><br><span class="line">      <span class="string">&quot;Cache-Control&quot;</span>:<span class="string">&quot;no-cache&quot;</span>,</span><br><span class="line">      <span class="string">&quot;Connection&quot;</span>:<span class="string">&quot;keep-alive&quot;</span>,</span><br><span class="line">      <span class="string">&quot;Access-Control-Allow-Origin&quot;</span>: <span class="string">&#x27;*&#x27;</span>,</span><br><span class="line">    &#125;);</span><br><span class="line">    res.write(<span class="string">&quot;retry: 10000\n&quot;</span>);</span><br><span class="line">    res.write(<span class="string">&quot;event: connecttime\n&quot;</span>);</span><br><span class="line">    res.write(<span class="string">&quot;data: &quot;</span> + (<span class="keyword">new</span> <span class="built_in">Date</span>()) + <span class="string">&quot;\n\n&quot;</span>);</span><br><span class="line">    res.write(<span class="string">&quot;data: &quot;</span> + (<span class="keyword">new</span> <span class="built_in">Date</span>()) + <span class="string">&quot;\n\n&quot;</span>);</span><br><span class="line"></span><br><span class="line">    interval = <span class="built_in">setInterval</span>(<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">      res.write(<span class="string">&quot;data: &quot;</span> + (<span class="keyword">new</span> <span class="built_in">Date</span>()) + <span class="string">&quot;\n\n&quot;</span>);</span><br><span class="line">    &#125;, <span class="number">1000</span>);</span><br><span class="line"></span><br><span class="line">    req.connection.addListener(<span class="string">&quot;close&quot;</span>, <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">      <span class="built_in">clearInterval</span>(interval);</span><br><span class="line">    &#125;, <span class="literal">false</span>);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;).listen(<span class="number">8844</span>, <span class="string">&quot;127.0.0.1&quot;</span>);</span><br></pre></td></tr></table></figure>
+
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/front-end-back-end/" rel="tag"># front-end back-end</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2019/03/21/regular-express/" rel="prev" title="regular express">
+      <i class="fa fa-chevron-left"></i> regular express
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2019/04/10/hackintosh/" rel="next" title="hackintosh">
+      hackintosh <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#WebSockets"><span class="nav-number">1.</span> <span class="nav-text">WebSockets</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%A7%A3%E5%86%B3%E9%97%AE%E9%A2%98"><span class="nav-number">1.1.</span> <span class="nav-text">解决问题</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#API%E5%AE%9E%E7%8E%B0"><span class="nav-number">1.2.</span> <span class="nav-text">API实现</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#socket-client%E7%AB%AF"><span class="nav-number">1.2.1.</span> <span class="nav-text">socket client端</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#node%E7%AB%AF"><span class="nav-number">1.2.2.</span> <span class="nav-text">node端</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SEE-Server-Sent-Event"><span class="nav-number">2.</span> <span class="nav-text">SEE(Server-Sent Event)</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#API%E5%AE%9E%E7%8E%B0-1"><span class="nav-number">2.1.</span> <span class="nav-text">API实现</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#client%E7%AB%AF"><span class="nav-number">2.1.1.</span> <span class="nav-text">client端</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#node%E7%AB%AF-1"><span class="nav-number">2.1.2.</span> <span class="nav-text">node端</span></a></li></ol></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="熊敬之"
+      src="/images/avatar.jpg">
+  <p class="site-author-name" itemprop="name">熊敬之</p>
+  <div class="site-description" itemprop="description">日就月将，学有缉熙于光明。</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives">
+        
+          <span class="site-state-item-count">28</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags">
+          
+        <span class="site-state-item-count">11</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/xiongjingzhi" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;xiongjingzhi" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://twitter.com/XiongJingzhi" title="Twitter → https:&#x2F;&#x2F;twitter.com&#x2F;XiongJingzhi" rel="noopener" target="_blank"><i class="fab fa-twitter fa-fw"></i>Twitter</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://space.bilibili.com/5709931" title="Bilibili → https:&#x2F;&#x2F;space.bilibili.com&#x2F;5709931" rel="noopener" target="_blank"><i class="fas fa-blog fa-fw"></i>Bilibili</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://www.zhihu.com/people/dengxianbaitou" title="Zhihu → https:&#x2F;&#x2F;www.zhihu.com&#x2F;people&#x2F;dengxianbaitou" rel="noopener" target="_blank"><i class="fab fa-zhihu fa-fw"></i>Zhihu</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://www.yuque.com/jingzhi-knq0o" title="语雀 → https:&#x2F;&#x2F;www.yuque.com&#x2F;jingzhi-knq0o" rel="noopener" target="_blank"><i class="fas fa-link fa-fw"></i>语雀</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://juejin.cn/user/78820567684077" title="掘金 → https:&#x2F;&#x2F;juejin.cn&#x2F;user&#x2F;78820567684077" rel="noopener" target="_blank"><i class="fas fa-link fa-fw"></i>掘金</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://segmentfault.com/u/davidxiong" title="Segmentfault → https:&#x2F;&#x2F;segmentfault.com&#x2F;u&#x2F;davidxiong" rel="noopener" target="_blank"><i class="fas fa-link fa-fw"></i>Segmentfault</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 2017 – 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">熊敬之</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://mist.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Mist</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

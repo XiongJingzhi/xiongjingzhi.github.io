@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/icon.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/icon.png">
+  <link rel="mask-icon" href="/images/icon.png" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"xiongjingzhi.com","root":"/","scheme":"Mist","version":"7.8.0","exturl":false,"sidebar":{"position":"right","display":"hide","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"appID":"MOW8LSDU04","apiKey":"38643437c31267d7e9cfdf90af50983b","indexName":"prod_NAME","hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="操作系统 内存管理 驱动管理 进程、线程、协程 文件系统  内存 32位 2**32 &#x3D;&#x3D; 4G DOS时代，内存是程序自己控制，不相互隔离（淘汰） Windows，统一的内存空间，（每个程序看到的内存地址都是相同） 存储器山 cache miss CPU n核心 ALU cpu寄存器（速度最快) 每个核心有L1，L2 对整个 CPU 而言的L3缓存，3M 内存，可以很大 8G 硬盘 网络传输">
+<meta property="og:type" content="article">
+<meta property="og:title" content=" 操作系统 大略">
+<meta property="og:url" content="https://xiongjingzhi.com/2018/09/06/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E5%A4%A7%E7%95%A5/index.html">
+<meta property="og:site_name" content="熊敬之">
+<meta property="og:description" content="操作系统 内存管理 驱动管理 进程、线程、协程 文件系统  内存 32位 2**32 &#x3D;&#x3D; 4G DOS时代，内存是程序自己控制，不相互隔离（淘汰） Windows，统一的内存空间，（每个程序看到的内存地址都是相同） 存储器山 cache miss CPU n核心 ALU cpu寄存器（速度最快) 每个核心有L1，L2 对整个 CPU 而言的L3缓存，3M 内存，可以很大 8G 硬盘 网络传输">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2018-09-06T23:38:39.000Z">
+<meta property="article:modified_time" content="2021-01-04T09:08:18.957Z">
+<meta property="article:author" content="熊敬之">
+<meta property="article:tag" content="back-end">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://xiongjingzhi.com/2018/09/06/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E5%A4%A7%E7%95%A5/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+  <title> 操作系统 大略 | 熊敬之</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">熊敬之</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+        <li class="menu-item menu-item-books">
+
+    <a href="/books" rel="section"><i class="fa fa-book fa-fw"></i>books</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://xiongjingzhi.com/2018/09/06/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E5%A4%A7%E7%95%A5/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="熊敬之">
+      <meta itemprop="description" content="日就月将，学有缉熙于光明。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="熊敬之">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+           操作系统 大略
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2018-09-06 23:38:39" itemprop="dateCreated datePublished" datetime="2018-09-06T23:38:39+00:00">2018-09-06</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2021-01-04 09:08:18" itemprop="dateModified" datetime="2021-01-04T09:08:18+00:00">2021-01-04</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="操作系统"><a href="#操作系统" class="headerlink" title="操作系统"></a>操作系统</h2><ol>
+<li>内存管理</li>
+<li>驱动管理</li>
+<li>进程、线程、协程</li>
+<li>文件系统</li>
+</ol>
+<h3 id="内存"><a href="#内存" class="headerlink" title="内存"></a>内存</h3><ul>
+<li>32位 2**32 == 4G</li>
+<li>DOS时代，内存是程序自己控制，不相互隔离（淘汰）</li>
+<li>Windows，统一的内存空间，（每个程序看到的内存地址都是相同）</li>
+<li>存储器山 cache miss<ol>
+<li>CPU n核心 ALU cpu寄存器（速度最快)</li>
+<li>每个核心有L1，L2</li>
+<li>对整个 CPU 而言的L3缓存，3M</li>
+<li>内存，可以很大 8G</li>
+<li>硬盘</li>
+<li>网络传输</li>
+</ol>
+</li>
+<li>虚拟存储器 统一的内存模型<ol>
+<li>一个程序4G， 内存+硬盘</li>
+<li>eg：电脑4G，a程序1G数据-&gt;内存，页表， b程序1G数据-&gt;内存，页表（把4G映射）<br> 此时有一个c程序3G, 要使用，此时把a存储，把 c 程序 load 进来（换）换入换出</li>
+<li>a -&gt;查页 page fault =&gt; page load =&gt; 正常运行</li>
+</ol>
+</li>
+<li>也有不经过CPU的，DMA</li>
+</ul>
+<h3 id="驱动"><a href="#驱动" class="headerlink" title="驱动"></a>驱动</h3><ul>
+<li>驱动是对硬件层的抽象</li>
+<li>键盘：ps/2, usb, bluetooth</li>
+<li>linux：统一成文件 接口 read write seek</li>
+</ul>
+<h3 id="文件系统"><a href="#文件系统" class="headerlink" title="文件系统"></a>文件系统</h3><ul>
+<li>original数组，在数组开始存储：[meta元信息 对应的文件位置（偏移量） 对应的文件大小]</li>
+<li>格式化： 会把所有信息抹掉，浪费时间</li>
+<li>快速格式化： meta清空，剩下的只是一堆无解的二进制</li>
+<li>抽象加密：所有的文件，都在一个file里</li>
+<li>/main/main.py -&gt; file load -&gt; execute</li>
+</ul>
+<h3 id="进程、线程、协程"><a href="#进程、线程、协程" class="headerlink" title="进程、线程、协程"></a>进程、线程、协程</h3><ol start="0">
+<li>DOS时代，没有Process概念</li>
+<li>进程（操作系统，调度资源的最小单位）有pid：ps aux</li>
+<li>实现原理：时间片；进程通信：pipe， file， socket</li>
+<li>多线程 multithreading，thread 或者 lightweight process，线程是进程中的一个实体</li>
+<li>多个线程共享一个进程资源的全局数据</li>
+</ol>
+<ul>
+<li>对于一个进程来说，你持有一个页表</li>
+<li>对于同一个进程内的线程，你将共享同一张页表</li>
+</ul>
+<ol start="5">
+<li>多线程同步问题</li>
+</ol>
+<ul>
+<li><p>数组 支持add</p>
+</li>
+<li><p>把数组size + 1</p>
+</li>
+<li><p>把add的这个数字放在 data[size]</p>
+</li>
+<li><p>有2个线程，同时去add</p>
+</li>
+<li><p>A线程 走了1</p>
+</li>
+<li><p>B线程 走了1</p>
+</li>
+<li><p>A 存了数据 data[size] = xxx</p>
+</li>
+<li><p>A 存了数据 data[size] = xxx</p>
+</li>
+<li><p>核心在于，操作被拆分了</p>
+</li>
+<li><p>解决：</p>
+</li>
+</ul>
+<ol>
+<li><p>atomic swap_and_cmp</p>
+</li>
+<li><p>加锁，mutex 互斥锁， 信号量， 读写锁， 自选锁。<br>同步：<br>加锁后，我对这个资源有所有权<br>在我的所有操作没有结束前，其它线程要等<br>问题： 同步后，可能死锁（哲学家进餐）</p>
+<ol>
+<li>为什么死锁？获取资源的顺序不一样<br>对于底下哲学家 先1后2<br>对于上面哲学家 先2后1</li>
+</ol>
+<p>所有的哲学家都是先1后2</p>
+<ol>
+<li>调整最后一个人的顺序</li>
+<li>如果我那不到右手，那我左手的也不要</li>
+</ol>
+</li>
+</ol>
+<ul>
+<li><p>线程安全的交换数据的函数<br> swap(a,b)</p>
+ <!-- id(a) id(b) --> 获取资源顺序一致，先lock内存大的
+<p> a.lock()<br> b.lock()<br> exchange(a.data, b.data)<br> a.unlock()<br> b.unlock()</p>
+<p> swap(a,b) —— swap(b,a) 死锁</p>
+</li>
+</ul>
+<ol start="6">
+<li>超线程，一个CPU内核跑两个线程，inter技术<br> 协程： 由程序自身控制，一个线程执行。一个线程里面I/O操作特别多，就用协程。<br> 协程就是你可以暂停执行的函数，<br> Python not use multithread? GIL global interpreter lock</li>
+<li>并发（Concurrency）和并行（Parallelism）<ul>
+<li>并发，不管多少线程，只有系统能同时处理多个事情，就是并发（时间片内）</li>
+<li>并行和多线程，多进程有关系，（精确的同时）</li>
+</ul>
+</li>
+<li>同步异步（信号触发）<ul>
+<li>事件发生不发生，是通过自己去检查得到的。</li>
+<li>事情的发生，别人通知给你的。</li>
+</ul>
+</li>
+<li>阻塞与非阻塞<ul>
+<li>阻塞， 等下去</li>
+<li>非阻塞， 不等</li>
+</ul>
+</li>
+<li>编译和解释<br>编译 -&gt; 代码 -&gt; 另一种代码 -&gt; 编译到机器码 ， 目标代码就是 机器码<br>解释 ： c 语言是统一的，用c写了一个虚拟机， 这个虚拟机是可以部署到任何机器的<br>Python就是逐步转换成虚拟机指令<br>JIT： just in time complier， hybrid混合方案，把最热的代码编译到机器码</li>
+<li>动态静态语言<ul>
+<li>动态静态： 赋值决定</li>
+<li>强类型弱类型： 1 + ‘1’ JS弱；1 + 1 Python强类型</li>
+<li>有 GC 无 GC： garbage collection 垃圾回收<br>  new 和 delete， // malloc free c， c++<br>  有GC的语言：java golang python ruby scala js<br>GC实现</li>
+</ul>
+<ol>
+<li>mark &amp; sweep  concurrent </li>
+<li>ref counting<br>Python 主要用ref counting， 解决不了用特殊的mark sweep</li>
+</ol>
+</li>
+</ol>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/back-end/" rel="tag"># back-end</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2018/09/06/Python-summary/" rel="prev" title="Python summary">
+      <i class="fa fa-chevron-left"></i> Python summary
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2018/09/07/%E5%9F%BA%E7%A1%80%E4%B9%90%E7%90%86/" rel="next" title="基础乐理">
+      基础乐理 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F"><span class="nav-number">1.</span> <span class="nav-text">操作系统</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%86%85%E5%AD%98"><span class="nav-number">1.1.</span> <span class="nav-text">内存</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%A9%B1%E5%8A%A8"><span class="nav-number">1.2.</span> <span class="nav-text">驱动</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F"><span class="nav-number">1.3.</span> <span class="nav-text">文件系统</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BF%9B%E7%A8%8B%E3%80%81%E7%BA%BF%E7%A8%8B%E3%80%81%E5%8D%8F%E7%A8%8B"><span class="nav-number">1.4.</span> <span class="nav-text">进程、线程、协程</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="熊敬之"
+      src="/images/avatar.jpg">
+  <p class="site-author-name" itemprop="name">熊敬之</p>
+  <div class="site-description" itemprop="description">日就月将，学有缉熙于光明。</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives">
+        
+          <span class="site-state-item-count">28</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags">
+          
+        <span class="site-state-item-count">11</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/xiongjingzhi" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;xiongjingzhi" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://twitter.com/XiongJingzhi" title="Twitter → https:&#x2F;&#x2F;twitter.com&#x2F;XiongJingzhi" rel="noopener" target="_blank"><i class="fab fa-twitter fa-fw"></i>Twitter</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://space.bilibili.com/5709931" title="Bilibili → https:&#x2F;&#x2F;space.bilibili.com&#x2F;5709931" rel="noopener" target="_blank"><i class="fas fa-blog fa-fw"></i>Bilibili</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://www.zhihu.com/people/dengxianbaitou" title="Zhihu → https:&#x2F;&#x2F;www.zhihu.com&#x2F;people&#x2F;dengxianbaitou" rel="noopener" target="_blank"><i class="fab fa-zhihu fa-fw"></i>Zhihu</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://www.yuque.com/jingzhi-knq0o" title="语雀 → https:&#x2F;&#x2F;www.yuque.com&#x2F;jingzhi-knq0o" rel="noopener" target="_blank"><i class="fas fa-link fa-fw"></i>语雀</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://juejin.cn/user/78820567684077" title="掘金 → https:&#x2F;&#x2F;juejin.cn&#x2F;user&#x2F;78820567684077" rel="noopener" target="_blank"><i class="fas fa-link fa-fw"></i>掘金</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://segmentfault.com/u/davidxiong" title="Segmentfault → https:&#x2F;&#x2F;segmentfault.com&#x2F;u&#x2F;davidxiong" rel="noopener" target="_blank"><i class="fas fa-link fa-fw"></i>Segmentfault</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 2017 – 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">熊敬之</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://mist.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Mist</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

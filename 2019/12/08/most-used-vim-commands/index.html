@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/icon.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/icon.png">
+  <link rel="mask-icon" href="/images/icon.png" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"xiongjingzhi.com","root":"/","scheme":"Mist","version":"7.8.0","exturl":false,"sidebar":{"position":"right","display":"hide","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"appID":"MOW8LSDU04","apiKey":"38643437c31267d7e9cfdf90af50983b","indexName":"prod_NAME","hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="vim model normal model: 普通模式 insert model: 插入模式  visual model: 视图模式  vim grammar Nearly all commands can be preceded by a number for a repeat count: 量词 + 命令 &lt;Esc&gt; gets you out of any mode and ba">
+<meta property="og:type" content="article">
+<meta property="og:title" content="most-used vim commands">
+<meta property="og:url" content="https://xiongjingzhi.com/2019/12/08/most-used-vim-commands/index.html">
+<meta property="og:site_name" content="熊敬之">
+<meta property="og:description" content="vim model normal model: 普通模式 insert model: 插入模式  visual model: 视图模式  vim grammar Nearly all commands can be preceded by a number for a repeat count: 量词 + 命令 &lt;Esc&gt; gets you out of any mode and ba">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2019-12-08T15:44:36.000Z">
+<meta property="article:modified_time" content="2021-01-04T09:08:18.957Z">
+<meta property="article:author" content="熊敬之">
+<meta property="article:tag" content="operation">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://xiongjingzhi.com/2019/12/08/most-used-vim-commands/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+  <title>most-used vim commands | 熊敬之</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">熊敬之</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+        <li class="menu-item menu-item-books">
+
+    <a href="/books" rel="section"><i class="fa fa-book fa-fw"></i>books</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://xiongjingzhi.com/2019/12/08/most-used-vim-commands/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="熊敬之">
+      <meta itemprop="description" content="日就月将，学有缉熙于光明。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="熊敬之">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          most-used vim commands
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2019-12-08 15:44:36" itemprop="dateCreated datePublished" datetime="2019-12-08T15:44:36+00:00">2019-12-08</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2021-01-04 09:08:18" itemprop="dateModified" datetime="2021-01-04T09:08:18+00:00">2021-01-04</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="vim-model"><a href="#vim-model" class="headerlink" title="vim model"></a>vim model</h2><ol>
+<li>normal model: 普通模式</li>
+<li>insert model: 插入模式 </li>
+<li>visual model: 视图模式</li>
+</ol>
+<h2 id="vim-grammar"><a href="#vim-grammar" class="headerlink" title="vim grammar"></a>vim grammar</h2><ol>
+<li>Nearly all commands can be preceded by a number for a repeat count: 量词 + 命令</li>
+<li><code>&lt;Esc&gt;</code> gets you out of any mode and back to command mode: escape 到normal模式 </li>
+<li>Commands preceded by : are executed on the command line at the bottom of the screen: 通过: 运行命令</li>
+<li>:help help with any command: 获取命令帮助</li>
+</ol>
+<h2 id="navigation"><a href="#navigation" class="headerlink" title="navigation"></a>navigation</h2><ol>
+<li>Cursor movement: ←h ↓j ↑k l→ : 光标移动</li>
+<li>Words: w (by punctuation)(下个单词头): 通过标点; W (by spaces): 通过空格; b(单词头); B; e(单词末); E;</li>
+<li>Line: 0 start(本行头); ^ first non-whitespace(第一个非空字符); $ end of line(本行末); - first non-whitespace of upper line(上一行第一非空字符);  + first non-whitespace of lower line(下一行第一非空字符);</li>
+<li>Paragraph: { previous blank line; } next blank line: 上下一个空格行</li>
+<li>File: gg G 100G: (G end of file, gg start of file, number G absolute line) </li>
+<li>Marks: mx (set mark x); ‘x go to mark; :marks view marks; ‘. go to position of last edit; ‘’ go back to last point before jump. </li>
+<li>Scroll: Ctrl+F, Ctrl+B full screen; Ctrl+D, Ctrl+U half screen; Ctrt+E, Ctrl+Y scroll one line; zz zt zb screen postion;</li>
+</ol>
+<h2 id="Edit"><a href="#Edit" class="headerlink" title="Edit"></a>Edit</h2><ol>
+<li>u undo; Ctrl+r;</li>
+<li>i insert text at cursor; I insert text at start of line; </li>
+<li>a append text after cursor; A end of line;</li>
+<li>o open new line below; O above; </li>
+<li>r replace single character; R multiple;</li>
+<li>cw change word; C change to end of line; cc change whole line;</li>
+<li>ci (inside parentheses); eg: ci’ ci) ci </li>
+</ol>
+<h2 id="todo"><a href="#todo" class="headerlink" title="todo"></a>todo</h2>
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/operation/" rel="tag"># operation</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2019/04/12/%E6%B5%8F%E8%A7%88%E5%99%A8%E4%B8%8ENode%E7%9A%84%E4%BA%8B%E4%BB%B6%E5%BE%AA%E7%8E%AF/" rel="prev" title="浏览器与Node的事件循环">
+      <i class="fa fa-chevron-left"></i> 浏览器与Node的事件循环
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2020/01/13/%E8%8B%B1%E8%AF%AD%E8%AF%8D%E6%A0%B9%E4%B8%8E%E8%AF%B4%E6%96%87%E8%A7%A3%E5%AD%97/" rel="next" title="英语词根与说文解字笔记 (一)">
+      英语词根与说文解字笔记 (一) <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#vim-model"><span class="nav-number">1.</span> <span class="nav-text">vim model</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#vim-grammar"><span class="nav-number">2.</span> <span class="nav-text">vim grammar</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#navigation"><span class="nav-number">3.</span> <span class="nav-text">navigation</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Edit"><span class="nav-number">4.</span> <span class="nav-text">Edit</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#todo"><span class="nav-number">5.</span> <span class="nav-text">todo</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="熊敬之"
+      src="/images/avatar.jpg">
+  <p class="site-author-name" itemprop="name">熊敬之</p>
+  <div class="site-description" itemprop="description">日就月将，学有缉熙于光明。</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives">
+        
+          <span class="site-state-item-count">28</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags">
+          
+        <span class="site-state-item-count">11</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/xiongjingzhi" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;xiongjingzhi" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://twitter.com/XiongJingzhi" title="Twitter → https:&#x2F;&#x2F;twitter.com&#x2F;XiongJingzhi" rel="noopener" target="_blank"><i class="fab fa-twitter fa-fw"></i>Twitter</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://space.bilibili.com/5709931" title="Bilibili → https:&#x2F;&#x2F;space.bilibili.com&#x2F;5709931" rel="noopener" target="_blank"><i class="fas fa-blog fa-fw"></i>Bilibili</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://www.zhihu.com/people/dengxianbaitou" title="Zhihu → https:&#x2F;&#x2F;www.zhihu.com&#x2F;people&#x2F;dengxianbaitou" rel="noopener" target="_blank"><i class="fab fa-zhihu fa-fw"></i>Zhihu</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://www.yuque.com/jingzhi-knq0o" title="语雀 → https:&#x2F;&#x2F;www.yuque.com&#x2F;jingzhi-knq0o" rel="noopener" target="_blank"><i class="fas fa-link fa-fw"></i>语雀</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://juejin.cn/user/78820567684077" title="掘金 → https:&#x2F;&#x2F;juejin.cn&#x2F;user&#x2F;78820567684077" rel="noopener" target="_blank"><i class="fas fa-link fa-fw"></i>掘金</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://segmentfault.com/u/davidxiong" title="Segmentfault → https:&#x2F;&#x2F;segmentfault.com&#x2F;u&#x2F;davidxiong" rel="noopener" target="_blank"><i class="fas fa-link fa-fw"></i>Segmentfault</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 2017 – 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">熊敬之</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://mist.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Mist</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/icon.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/icon.png">
+  <link rel="mask-icon" href="/images/icon.png" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"xiongjingzhi.com","root":"/","scheme":"Mist","version":"7.8.0","exturl":false,"sidebar":{"position":"right","display":"hide","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"appID":"MOW8LSDU04","apiKey":"38643437c31267d7e9cfdf90af50983b","indexName":"prod_NAME","hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="拖曳123456789101112131415161718192021222324252627282930313233343536373839404142var box &#x3D; document.querySelector(&amp;#x27;.box&amp;#x27;)var container &#x3D; document.querySelector(&amp;#x27;.container&amp;#x27;)&#x2F;&#x2F; 整个拖拽都会执行">
+<meta property="og:type" content="article">
+<meta property="og:title" content="HTML5相关代码">
+<meta property="og:url" content="https://xiongjingzhi.com/2018/09/26/HTML5%E7%9B%B8%E5%85%B3%E4%BB%A3%E7%A0%81/index.html">
+<meta property="og:site_name" content="熊敬之">
+<meta property="og:description" content="拖曳123456789101112131415161718192021222324252627282930313233343536373839404142var box &#x3D; document.querySelector(&amp;#x27;.box&amp;#x27;)var container &#x3D; document.querySelector(&amp;#x27;.container&amp;#x27;)&#x2F;&#x2F; 整个拖拽都会执行">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2018-09-26T23:55:31.000Z">
+<meta property="article:modified_time" content="2021-01-04T09:08:18.957Z">
+<meta property="article:author" content="熊敬之">
+<meta property="article:tag" content="front-end">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://xiongjingzhi.com/2018/09/26/HTML5%E7%9B%B8%E5%85%B3%E4%BB%A3%E7%A0%81/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+  <title>HTML5相关代码 | 熊敬之</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">熊敬之</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+        <li class="menu-item menu-item-books">
+
+    <a href="/books" rel="section"><i class="fa fa-book fa-fw"></i>books</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://xiongjingzhi.com/2018/09/26/HTML5%E7%9B%B8%E5%85%B3%E4%BB%A3%E7%A0%81/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="熊敬之">
+      <meta itemprop="description" content="日就月将，学有缉熙于光明。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="熊敬之">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          HTML5相关代码
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2018-09-26 23:55:31" itemprop="dateCreated datePublished" datetime="2018-09-26T23:55:31+00:00">2018-09-26</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2021-01-04 09:08:18" itemprop="dateModified" datetime="2021-01-04T09:08:18+00:00">2021-01-04</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="拖曳"><a href="#拖曳" class="headerlink" title="拖曳"></a>拖曳</h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> box = <span class="built_in">document</span>.querySelector(<span class="string">&#x27;.box&#x27;</span>)</span><br><span class="line"><span class="keyword">var</span> container = <span class="built_in">document</span>.querySelector(<span class="string">&#x27;.container&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">// 整个拖拽都会执行</span></span><br><span class="line">box.addEventListener(<span class="string">&#x27;drag&#x27;</span>, <span class="function"><span class="keyword">function</span>(<span class="params">e</span>) </span>&#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">&#x27;drag&#x27;</span>)</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line"><span class="comment">// 拖拽的点离开当前盒子</span></span><br><span class="line">box.addEventListener(<span class="string">&#x27;dragleave&#x27;</span>, <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">&#x27;dragleave&#x27;</span>)</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line"><span class="comment">// 拖拽开始</span></span><br><span class="line">box.addEventListener(<span class="string">&#x27;dragstart&#x27;</span>, <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="built_in">this</span>.style.backgroundColor = <span class="string">&#x27;red&#x27;</span></span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">&#x27;dragstart&#x27;</span>)</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line"><span class="comment">// 拖拽结束</span></span><br><span class="line">box.addEventListener(<span class="string">&#x27;dragend&#x27;</span>, <span class="function"><span class="keyword">function</span>(<span class="params">ev</span>) </span>&#123;</span><br><span class="line">  <span class="built_in">this</span>.style.backgroundColor = <span class="string">&#x27;&#x27;</span></span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">&#x27;dragend&#x27;</span>)</span><br><span class="line">&#125;)</span><br><span class="line"><span class="comment">//在目标元素上移动</span></span><br><span class="line">container.addEventListener(<span class="string">&#x27;dragover&#x27;</span>, <span class="function"><span class="keyword">function</span>(<span class="params">e</span>) </span>&#123;</span><br><span class="line">  <span class="built_in">this</span>.style.backgroundColor = <span class="string">&#x27;yellow&#x27;</span></span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">&#x27;目标dragover&#x27;</span>)</span><br><span class="line">  e.preventDefault()</span><br><span class="line">&#125;)</span><br><span class="line"><span class="comment">//在目标元素松开</span></span><br><span class="line">container.addEventListener(<span class="string">&#x27;drop&#x27;</span>, <span class="function"><span class="keyword">function</span>(<span class="params">e</span>) </span>&#123;</span><br><span class="line">  <span class="built_in">this</span>.style.backgroundColor = <span class="string">&#x27;black&#x27;</span></span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">&#x27;目标drop&#x27;</span>)</span><br><span class="line">  e.preventDefault()</span><br><span class="line">&#125;)</span><br><span class="line"><span class="comment">//在目标元素离开</span></span><br><span class="line">container.addEventListener(<span class="string">&#x27;dragleave&#x27;</span>, <span class="function"><span class="keyword">function</span>(<span class="params">e</span>) </span>&#123;</span><br><span class="line">  <span class="built_in">this</span>.style.backgroundColor = <span class="string">&#x27;&#x27;</span></span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">&#x27;目标dragleave&#x27;</span>)</span><br><span class="line">  e.preventDefault()</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+<h2 id="文件读取"><a href="#文件读取" class="headerlink" title="文件读取"></a>文件读取</h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/*获取到了文件表单元素*/</span></span><br><span class="line"><span class="keyword">var</span> file = <span class="built_in">document</span>.querySelector(<span class="string">&#x27;.file&#x27;</span>)</span><br><span class="line"><span class="comment">/*选择文件后触发*/</span></span><br><span class="line">file.onchange = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="comment">/*初始化了一个文件读取对象*/</span></span><br><span class="line">  <span class="keyword">var</span> reader = <span class="keyword">new</span> FileReader()</span><br><span class="line">  <span class="comment">/*读取文件数据  this.files[0] 文件表单元素选择的第一个文件 */</span></span><br><span class="line">  reader.readAsDataURL(<span class="built_in">this</span>.files[<span class="number">0</span>])</span><br><span class="line">  <span class="comment">/*读取的过程就相当于 加载过程 */</span></span><br><span class="line">  <span class="comment">/*读取完毕  预览 */</span></span><br><span class="line">  reader.onload = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="comment">/*读取完毕 base64位数据  表示图片*/</span></span><br><span class="line">    <span class="built_in">console</span>.log(<span class="built_in">this</span>.result)</span><br><span class="line">    <span class="built_in">document</span>.querySelector(<span class="string">&#x27;#img&#x27;</span>).src = <span class="built_in">this</span>.result</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="网络状态"><a href="#网络状态" class="headerlink" title="网络状态"></a>网络状态</h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 通过window.navigator.onLine可以返回当前的网络状态</span></span><br><span class="line">alert(<span class="built_in">window</span>.navigator.onLine)</span><br><span class="line"></span><br><span class="line"><span class="built_in">window</span>.addEventListener(<span class="string">&#x27;online&#x27;</span>, <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="comment">//alert(&#x27;online&#x27;)</span></span><br><span class="line">  $(<span class="string">&#x27;.tips&#x27;</span>)</span><br><span class="line">    .text(<span class="string">&#x27;网络已连接&#x27;</span>)</span><br><span class="line">    .fadeIn(<span class="number">500</span>)</span><br><span class="line">    .delay(<span class="number">1000</span>)</span><br><span class="line">    .fadeOut()</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line"><span class="built_in">window</span>.addEventListener(<span class="string">&#x27;offline&#x27;</span>, <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="comment">//alert(&#x27;offline&#x27;)</span></span><br><span class="line">  $(<span class="string">&#x27;.tips&#x27;</span>)</span><br><span class="line">    .text(<span class="string">&#x27;网络已断开&#x27;</span>)</span><br><span class="line">    .fadeIn(<span class="number">500</span>)</span><br><span class="line">    .delay(<span class="number">1000</span>)</span><br><span class="line">    .fadeOut()</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+<h2 id="geolocation"><a href="#geolocation" class="headerlink" title="geolocation"></a>geolocation</h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (navigator.geolocation) &#123;</span><br><span class="line">  <span class="comment">/*getCurrentPosition 获取当前定位信息*/</span></span><br><span class="line">  navigator.geolocation.getCurrentPosition(</span><br><span class="line">    <span class="function"><span class="keyword">function</span>(<span class="params">position</span>) </span>&#123;</span><br><span class="line">      <span class="comment">/*获取定位信息成功*/</span></span><br><span class="line">      <span class="comment">/*position 定位信息对象*/</span></span><br><span class="line">      <span class="comment">/*position 属性 coords 坐标对象*/</span></span><br><span class="line">      <span class="comment">/*coords 有 经纬度 海拔 ... */</span></span><br><span class="line">      <span class="comment">/* latitude 维度  longitude 经度 */</span></span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="function"><span class="keyword">function</span>(<span class="params">PositionError</span>) </span>&#123;</span><br><span class="line">      <span class="comment">/*获取定位信息失败*/</span></span><br><span class="line">      <span class="comment">/*PositionError 失败信息*/</span></span><br><span class="line">    &#125;</span><br><span class="line">  )</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="storage"><a href="#storage" class="headerlink" title="storage"></a>storage</h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br></pre></td><td class="code"><pre><span class="line">$(<span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="comment">/*1.使用json数据存储搜索历史记录*/</span></span><br><span class="line">  <span class="comment">/*2.预设一个key   historyList */</span></span><br><span class="line">  <span class="comment">/*3.数据格式列表 存的是json格式的数组*/</span></span><br><span class="line">  <span class="comment">/*4. [电脑，手机，。。。。]*/</span></span><br><span class="line"></span><br><span class="line">  <span class="comment">/*1.默认根据历史记录渲染历史列表*/</span></span><br><span class="line">  <span class="keyword">var</span> historyListJson = <span class="built_in">localStorage</span>.getItem(<span class="string">&#x27;historyList&#x27;</span>) || <span class="string">&#x27;[]&#x27;</span></span><br><span class="line">  <span class="keyword">var</span> historyListArr = <span class="built_in">JSON</span>.parse(historyListJson)</span><br><span class="line">  <span class="comment">/*获取到了数组格式的数据*/</span></span><br><span class="line">  <span class="keyword">var</span> render = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="comment">/*$.each(function(i,item)&#123;&#125;) for() for in */</span></span><br><span class="line">    <span class="comment">/* forEach 遍历函数  只能数组调用  回到函数（所有对应的值，索引）*/</span></span><br><span class="line">    <span class="keyword">var</span> html = <span class="string">&#x27;&#x27;</span></span><br><span class="line">    historyListArr.forEach(<span class="function"><span class="keyword">function</span>(<span class="params">item, i</span>) </span>&#123;</span><br><span class="line">      html +=</span><br><span class="line">        <span class="string">&#x27;&lt;li&gt;&lt;span&gt;&#x27;</span> +</span><br><span class="line">        item +</span><br><span class="line">        <span class="string">&#x27;&lt;/span&gt;&lt;a data-index=&quot;&#x27;</span> +</span><br><span class="line">        i +</span><br><span class="line">        <span class="string">&#x27;&quot; href=&quot;javascript:&quot;&gt;删除&lt;/a&gt;&lt;/li&gt;&#x27;</span></span><br><span class="line">    &#125;)</span><br><span class="line">    html = html || <span class="string">&#x27;&lt;li&gt;没有搜索记录&lt;/li&gt;&#x27;</span></span><br><span class="line">    $(<span class="string">&#x27;ul&#x27;</span>).html(html)</span><br><span class="line">  &#125;</span><br><span class="line">  render()</span><br><span class="line"></span><br><span class="line">  <span class="comment">/*2.点击搜索的时候更新历史记录渲染列表*/</span></span><br><span class="line">  $(<span class="string">&#x27;[type=&quot;button&quot;]&#x27;</span>).on(<span class="string">&#x27;click&#x27;</span>, <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> key = $.trim($(<span class="string">&#x27;[type=search]&#x27;</span>).val())</span><br><span class="line">    <span class="keyword">if</span> (!key) &#123;</span><br><span class="line">      alert(<span class="string">&#x27;请输入搜索关键字&#x27;</span>)</span><br><span class="line">      <span class="keyword">return</span> <span class="literal">false</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">/*追加一条历史*/</span></span><br><span class="line">    historyListArr.push(key)</span><br><span class="line">    <span class="comment">/*保存*/</span></span><br><span class="line">    <span class="built_in">localStorage</span>.setItem(<span class="string">&#x27;historyList&#x27;</span>, <span class="built_in">JSON</span>.stringify(historyListArr))</span><br><span class="line">    <span class="comment">/*渲染一次*/</span></span><br><span class="line">    render()</span><br><span class="line">    $(<span class="string">&#x27;[type=search]&#x27;</span>).val(<span class="string">&#x27;&#x27;</span>)</span><br><span class="line">  &#125;)</span><br><span class="line"></span><br><span class="line">  <span class="comment">/*3.点击删除的时候删除对应的历史记录渲染列表*/</span></span><br><span class="line">  $(<span class="string">&#x27;ul&#x27;</span>).on(<span class="string">&#x27;click&#x27;</span>, <span class="string">&#x27;a&#x27;</span>, <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> index = $(<span class="built_in">this</span>).data(<span class="string">&#x27;index&#x27;</span>)</span><br><span class="line">    <span class="comment">/*删除*/</span></span><br><span class="line">    historyListArr.splice(index, <span class="number">1</span>)</span><br><span class="line">    <span class="comment">/*保存*/</span></span><br><span class="line">    <span class="built_in">localStorage</span>.setItem(<span class="string">&#x27;historyList&#x27;</span>, <span class="built_in">JSON</span>.stringify(historyListArr))</span><br><span class="line">    <span class="comment">/*渲染一次*/</span></span><br><span class="line">    render()</span><br><span class="line">  &#125;)</span><br><span class="line">  <span class="comment">/*4.点击清空的时候清空历史记录渲染列表*/</span></span><br><span class="line">  $(<span class="string">&#x27;div a&#x27;</span>).on(<span class="string">&#x27;click&#x27;</span>, <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="comment">/*清空*/</span></span><br><span class="line">    historyListArr = []</span><br><span class="line">    <span class="comment">/*慎用  清空网上的所有本地存储*/</span></span><br><span class="line">    <span class="comment">//localStorage.clear()</span></span><br><span class="line">    <span class="comment">//localStorage.removeItem(&#x27;historyList&#x27;)</span></span><br><span class="line">    <span class="built_in">localStorage</span>.setItem(<span class="string">&#x27;historyList&#x27;</span>, <span class="string">&#x27;&#x27;</span>)</span><br><span class="line">    render()</span><br><span class="line">  &#125;)</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+<h2 id="history"><a href="#history" class="headerlink" title="history"></a>history</h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// window.history.length</span></span><br><span class="line"><span class="comment">// history</span></span><br><span class="line"><span class="comment">// history.back()  去上一条历史</span></span><br><span class="line"><span class="comment">// history.forward() 去下一条历史</span></span><br><span class="line"><span class="comment">// history.go() 相对当前  跳多少条记录   正 前走  负 后退</span></span><br><span class="line"><span class="comment">// history.pushState();</span></span><br><span class="line"><span class="comment">// history.replaceState();</span></span><br><span class="line"><span class="comment">// window.onpopstate = function()&#123;&#125;</span></span><br><span class="line"><span class="comment">/*1.存数据  null*/</span></span><br><span class="line"><span class="comment">/*2.存标题  null*/</span></span><br><span class="line"><span class="comment">/*3.追叫的历史记录的地址*/</span></span><br><span class="line">history.pushState(<span class="literal">null</span>,<span class="literal">null</span>,<span class="string">&#x27;test.html&#x27;</span>)</span><br><span class="line">history.replaceState(<span class="literal">null</span>,<span class="literal">null</span>,<span class="string">&#x27;test.html&#x27;</span>)</span><br></pre></td></tr></table></figure>
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/front-end/" rel="tag"># front-end</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2018/09/23/https%E5%92%8Cssh%E9%80%9A%E4%BF%A1/" rel="prev" title="https和ssh通信">
+      <i class="fa fa-chevron-left"></i> https和ssh通信
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2018/10/29/%E8%8B%B1%E8%AF%AD%E4%B8%AD%E5%BC%80-%E9%97%AD%E9%9F%B3%E8%8A%82%E5%92%8C%E9%87%8D-%E9%9D%9E%E9%87%8D%E8%AF%BB/" rel="next" title="英语中开/闭音节和重/非重读">
+      英语中开/闭音节和重/非重读 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%8B%96%E6%9B%B3"><span class="nav-number">1.</span> <span class="nav-text">拖曳</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%96%87%E4%BB%B6%E8%AF%BB%E5%8F%96"><span class="nav-number">2.</span> <span class="nav-text">文件读取</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BD%91%E7%BB%9C%E7%8A%B6%E6%80%81"><span class="nav-number">3.</span> <span class="nav-text">网络状态</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#geolocation"><span class="nav-number">4.</span> <span class="nav-text">geolocation</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#storage"><span class="nav-number">5.</span> <span class="nav-text">storage</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#history"><span class="nav-number">6.</span> <span class="nav-text">history</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="熊敬之"
+      src="/images/avatar.jpg">
+  <p class="site-author-name" itemprop="name">熊敬之</p>
+  <div class="site-description" itemprop="description">日就月将，学有缉熙于光明。</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives">
+        
+          <span class="site-state-item-count">28</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags">
+          
+        <span class="site-state-item-count">11</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/xiongjingzhi" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;xiongjingzhi" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://twitter.com/XiongJingzhi" title="Twitter → https:&#x2F;&#x2F;twitter.com&#x2F;XiongJingzhi" rel="noopener" target="_blank"><i class="fab fa-twitter fa-fw"></i>Twitter</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://space.bilibili.com/5709931" title="Bilibili → https:&#x2F;&#x2F;space.bilibili.com&#x2F;5709931" rel="noopener" target="_blank"><i class="fas fa-blog fa-fw"></i>Bilibili</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://www.zhihu.com/people/dengxianbaitou" title="Zhihu → https:&#x2F;&#x2F;www.zhihu.com&#x2F;people&#x2F;dengxianbaitou" rel="noopener" target="_blank"><i class="fab fa-zhihu fa-fw"></i>Zhihu</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://www.yuque.com/jingzhi-knq0o" title="语雀 → https:&#x2F;&#x2F;www.yuque.com&#x2F;jingzhi-knq0o" rel="noopener" target="_blank"><i class="fas fa-link fa-fw"></i>语雀</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://juejin.cn/user/78820567684077" title="掘金 → https:&#x2F;&#x2F;juejin.cn&#x2F;user&#x2F;78820567684077" rel="noopener" target="_blank"><i class="fas fa-link fa-fw"></i>掘金</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://segmentfault.com/u/davidxiong" title="Segmentfault → https:&#x2F;&#x2F;segmentfault.com&#x2F;u&#x2F;davidxiong" rel="noopener" target="_blank"><i class="fas fa-link fa-fw"></i>Segmentfault</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 2017 – 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">熊敬之</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://mist.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Mist</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>
