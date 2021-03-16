@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/icon.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/icon.png">
+  <link rel="mask-icon" href="/images/icon.png" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"xiongjingzhi.com","root":"/","scheme":"Mist","version":"7.8.0","exturl":false,"sidebar":{"position":"right","display":"hide","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"appID":"MOW8LSDU04","apiKey":"38643437c31267d7e9cfdf90af50983b","indexName":"prod_NAME","hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="概述直接打开Chrome Dev，Application与前端存储相关。 Cookie最大能存4k，全是字符串，在HTTP协议中，服务费通过Set-Cookie也能设置。 http协议设置在Set-Cookie中比浏览器多的属性有  HttpOnly，只能通过http协议来设置，不让前端处理  SameSite&#x3D;Strict|Lax|None，在chrome2020年底之前，默认全是Lax，之后是">
+<meta property="og:type" content="article">
+<meta property="og:title" content="前端存储">
+<meta property="og:url" content="https://xiongjingzhi.com/2021/03/16/%E5%89%8D%E7%AB%AF%E5%AD%98%E5%82%A8/index.html">
+<meta property="og:site_name" content="熊敬之">
+<meta property="og:description" content="概述直接打开Chrome Dev，Application与前端存储相关。 Cookie最大能存4k，全是字符串，在HTTP协议中，服务费通过Set-Cookie也能设置。 http协议设置在Set-Cookie中比浏览器多的属性有  HttpOnly，只能通过http协议来设置，不让前端处理  SameSite&#x3D;Strict|Lax|None，在chrome2020年底之前，默认全是Lax，之后是">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2021/png/332075/1615426583702-0709d970-98ab-49b3-89d1-d499dec4fccf.png#align=left&display=inline&height=268&margin=%5Bobject%20Object%5D&name=image.png&originHeight=270&originWidth=251&size=10797&status=done&style=none&width=249">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2021/png/332075/1615448495461-bb64e2cf-e24a-454c-b9aa-3c964a3ac3ab.png#align=left&display=inline&height=703&margin=%5Bobject%20Object%5D&name=image.png&originHeight=703&originWidth=757&size=35190&status=done&style=none&width=757">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2021/png/332075/1615517495593-73288390-a0e3-49ea-92a2-a0be66dd83bc.png#align=left&display=inline&height=368&margin=%5Bobject%20Object%5D&name=image.png&originHeight=368&originWidth=911&size=134419&status=done&style=none&width=911">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2021/png/332075/1615443986230-fb5bbfe2-9fcd-4f9a-84bf-abcf10d457ff.png#align=left&display=inline&height=70&margin=%5Bobject%20Object%5D&name=image.png&originHeight=70&originWidth=1040&size=11432&status=done&style=none&width=1040">
+<meta property="article:published_time" content="2021-03-16T22:42:10.000Z">
+<meta property="article:modified_time" content="2021-03-16T14:55:06.016Z">
+<meta property="article:author" content="熊敬之">
+<meta property="article:tag" content="front-end">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://cdn.nlark.com/yuque/0/2021/png/332075/1615426583702-0709d970-98ab-49b3-89d1-d499dec4fccf.png#align=left&display=inline&height=268&margin=%5Bobject%20Object%5D&name=image.png&originHeight=270&originWidth=251&size=10797&status=done&style=none&width=249">
+
+<link rel="canonical" href="https://xiongjingzhi.com/2021/03/16/%E5%89%8D%E7%AB%AF%E5%AD%98%E5%82%A8/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+  <title>前端存储 | 熊敬之</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+  <meta name="referrer" content="no-referrer" />
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">熊敬之</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+        <li class="menu-item menu-item-books">
+
+    <a href="/books" rel="section"><i class="fa fa-book fa-fw"></i>books</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://xiongjingzhi.com/2021/03/16/%E5%89%8D%E7%AB%AF%E5%AD%98%E5%82%A8/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="熊敬之">
+      <meta itemprop="description" content="日就月将，学有缉熙于光明。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="熊敬之">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          前端存储
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2021-03-16 22:42:10 / Modified: 14:55:06" itemprop="dateCreated datePublished" datetime="2021-03-16T22:42:10+00:00">2021-03-16</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p><img src="https://cdn.nlark.com/yuque/0/2021/png/332075/1615426583702-0709d970-98ab-49b3-89d1-d499dec4fccf.png#align=left&display=inline&height=268&margin=%5Bobject%20Object%5D&name=image.png&originHeight=270&originWidth=251&size=10797&status=done&style=none&width=249" alt="image.png">直接打开Chrome Dev，Application与前端存储相关。</p>
+<h2 id="Cookie"><a href="#Cookie" class="headerlink" title="Cookie"></a>Cookie</h2><p>最大能存4k，全是字符串，在HTTP协议中，服务费通过Set-Cookie也能设置。</p>
+<h3 id="http协议设置"><a href="#http协议设置" class="headerlink" title="http协议设置"></a>http协议设置</h3><p>在Set-Cookie中比浏览器多的属性有</p>
+<ul>
+<li><p>HttpOnly，只能通过http协议来设置，不让前端处理</p>
+</li>
+<li><p>SameSite=Strict|Lax|None，在chrome2020年底之前，默认全是Lax，之后是None，如果是None的话，必须设置secure。为Strict时，从A页面对B页面进行跨页面，不会带上A页面Cookie，为了防止CSRF。具体规则如下表：</p>
+</li>
+<li><p><img src="https://cdn.nlark.com/yuque/0/2021/png/332075/1615448495461-bb64e2cf-e24a-454c-b9aa-3c964a3ac3ab.png#align=left&display=inline&height=703&margin=%5Bobject%20Object%5D&name=image.png&originHeight=703&originWidth=757&size=35190&status=done&style=none&width=757" alt="image.png"></p>
+</li>
+<li><p><img src="https://cdn.nlark.com/yuque/0/2021/png/332075/1615517495593-73288390-a0e3-49ea-92a2-a0be66dd83bc.png#align=left&display=inline&height=368&margin=%5Bobject%20Object%5D&name=image.png&originHeight=368&originWidth=911&size=134419&status=done&style=none&width=911" alt="image.png"></p>
+</li>
+<li><p>一个<code>set-Cookie</code>字段只能设置一个<code>cookie</code>，当你要想设置多个 cookie，需要添加同样多的<code>set-Cookie</code>字段。</p>
+</li>
+<li><p>服务端可以设置cookie 的所有选项：<code>expires</code>、<code>domain</code>、<code>path</code>、<code>secure</code>、<code>HttpOnly</code> 、sfads</p>
+</li>
+</ul>
+<p><img src="https://cdn.nlark.com/yuque/0/2021/png/332075/1615443986230-fb5bbfe2-9fcd-4f9a-84bf-abcf10d457ff.png#align=left&display=inline&height=70&margin=%5Bobject%20Object%5D&name=image.png&originHeight=70&originWidth=1040&size=11432&status=done&style=none&width=1040" alt="image.png"></p>
+<h3 id="前端设置"><a href="#前端设置" class="headerlink" title="前端设置"></a>前端设置</h3><p><em>document</em>.cookie 获取全部cookie值<br>document.cookie = newCookie, 只能设置/更新一个cookie，附加属性用分号;风格。<br>document.cookie = encodeURIComponent(“hello=world;path=/;domain=.example.com;expires=Wed, 14 Jun 2017 07:00:00 GMT;secure”)</p>
+<h4 id="附加属性"><a href="#附加属性" class="headerlink" title="附加属性"></a>附加属性</h4><ul>
+<li>;path=path，默认是/（/的子路径都可以访问），使用/bar的话，只有/bar, /bar/11这些的子域名能访问。</li>
+<li>;domain=domain，设置的域名包含其子域名，example.com，包含了则aaa.example.com，可以用来cookie共享。</li>
+<li>;max-age=max-age-in-seconds, 设置cookie过期时间，单位为秒数。（365 <em>24</em> 60 * 60）一年。在除了老版本的IE浏览器中，max-age的优先级大于expires。ie6、ie7 和 ie8不支持max-age</li>
+<li>;expires=_date-in-GMTString-format，设置过期日期，格式为_toUTCString格式，如Wed, 14 Jun 2017 07:00:00 GMT。</li>
+<li>;secure，只要存有这个字段，即设置协议只能通过https协议。</li>
+<li>设置<strong>值字符串</strong>时为了保证字符串不包含逗号，分号，空格，需要转义<a target="_blank" rel="noopener" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/encodeURIComponent">encodeURIComponent()</a>。</li>
+<li>删除一个<code>cookie</code> 也挺简单，也是重新赋值，只要将这个新cookie的<code>expires</code> 选项设置为一个过去的时间点就行了。但同样要注意，<code>path/domain/</code>这几个选项一定要旧cookie 保持一样。</li>
+</ul>
+<h2 id="SessionStorage"><a href="#SessionStorage" class="headerlink" title="SessionStorage"></a>SessionStorage</h2><p>生命周期只是对话通信中，浏览器中两个Tab不会贡献，重新加载或恢复页面会恢复SessionStorage，只有关闭Tab或者window会清除。<br>实例方法：setItem(name)，getItem(name)，</p>
+<h2 id="LocalStorage"><a href="#LocalStorage" class="headerlink" title="LocalStorage"></a>LocalStorage</h2><p>2.5MB，5MB，无限</p>
+<h2 id="IndexedDB"><a href="#IndexedDB" class="headerlink" title="IndexedDB"></a>IndexedDB</h2><p>事实上前端数据库标准，类似mongoDB，非关系性数据库。一般是250M，甚至无上限。可以与web worker整合。<br>适合存储大量结构化数据。</p>
+<h3 id="特点"><a href="#特点" class="headerlink" title="特点"></a>特点</h3><ul>
+<li>键值对储存。 IndexedDB 内部采用对象仓库（object store）存放数据。所有类型的数据都可以直接存入，包括 JavaScript 对象。对象仓库中，数据以”键值对”的形式保存，每一个数据记录都有对应的主键，主键是独一无二的，不能有重复，否则会抛出一个错误。</li>
+<li>异步。 IndexedDB 操作时不会锁死浏览器，用户依然可以进行其他操作，这与 LocalStorage 形成对比，后者的操作是同步的。异步设计是为了防止大量数据的读写，拖慢网页的表现。</li>
+<li>支持事务。 IndexedDB 支持事务（transaction），这意味着一系列操作步骤之中，只要有一步失败，整个事务就都取消，数据库回滚到事务发生之前的状态，不存在只改写一部分数据的情况。</li>
+<li>同源限制 IndexedDB 受到同源限制，每一个数据库对应创建它的域名。网页只能访问自身域名下的数据库，而不能访问跨域的数据库。</li>
+<li>储存空间大 IndexedDB 的储存空间比 LocalStorage 大得多，一般来说不少于 250MB，甚至没有上限。</li>
+<li>支持二进制储存。 IndexedDB 不仅可以储存字符串，还可以储存二进制数据（ArrayBuffer 对象和 Blob 对象）。</li>
+<li>需要手动更新或者手动删除</li>
+</ul>
+<h3 id="前端设置-1"><a href="#前端设置-1" class="headerlink" title="前端设置"></a>前端设置</h3><p>window.indexedDB.open(‘DatabaseName’, Versions )                    //创建数据库<br>window.indexedDB.deleteDatabase(‘DatabaseName’)                    //删除数据库</p>
+<h2 id="Web-SQL"><a href="#Web-SQL" class="headerlink" title="Web SQL"></a>Web SQL</h2><p>类似MySQL这中关系型数据库。<br><a target="_blank" rel="noopener" href="https://w3.org/TR/webdatabase/#status-of-this-document">规范未得到维护</a>,最后的更新时间是2010年，已经舍弃了Web SQL database草案，大概率以后不会成为标准。</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/front-end/" rel="tag"># front-end</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2021/01/04/vue3.0%E8%AF%BB%E5%90%8E%E8%AE%B0/" rel="prev" title="vue3.0读后记">
+      <i class="fa fa-chevron-left"></i> vue3.0读后记
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A6%82%E8%BF%B0"><span class="nav-number">1.</span> <span class="nav-text">概述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Cookie"><span class="nav-number">2.</span> <span class="nav-text">Cookie</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#http%E5%8D%8F%E8%AE%AE%E8%AE%BE%E7%BD%AE"><span class="nav-number">2.1.</span> <span class="nav-text">http协议设置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%89%8D%E7%AB%AF%E8%AE%BE%E7%BD%AE"><span class="nav-number">2.2.</span> <span class="nav-text">前端设置</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%99%84%E5%8A%A0%E5%B1%9E%E6%80%A7"><span class="nav-number">2.2.1.</span> <span class="nav-text">附加属性</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SessionStorage"><span class="nav-number">3.</span> <span class="nav-text">SessionStorage</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#LocalStorage"><span class="nav-number">4.</span> <span class="nav-text">LocalStorage</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#IndexedDB"><span class="nav-number">5.</span> <span class="nav-text">IndexedDB</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%89%B9%E7%82%B9"><span class="nav-number">5.1.</span> <span class="nav-text">特点</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%89%8D%E7%AB%AF%E8%AE%BE%E7%BD%AE-1"><span class="nav-number">5.2.</span> <span class="nav-text">前端设置</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Web-SQL"><span class="nav-number">6.</span> <span class="nav-text">Web SQL</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="熊敬之"
+      src="/images/avatar.jpg">
+  <p class="site-author-name" itemprop="name">熊敬之</p>
+  <div class="site-description" itemprop="description">日就月将，学有缉熙于光明。</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives">
+        
+          <span class="site-state-item-count">29</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags">
+          
+        <span class="site-state-item-count">11</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/xiongjingzhi" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;xiongjingzhi" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://twitter.com/XiongJingzhi" title="Twitter → https:&#x2F;&#x2F;twitter.com&#x2F;XiongJingzhi" rel="noopener" target="_blank"><i class="fab fa-twitter fa-fw"></i>Twitter</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://space.bilibili.com/5709931" title="Bilibili → https:&#x2F;&#x2F;space.bilibili.com&#x2F;5709931" rel="noopener" target="_blank"><i class="fas fa-blog fa-fw"></i>Bilibili</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://www.zhihu.com/people/dengxianbaitou" title="Zhihu → https:&#x2F;&#x2F;www.zhihu.com&#x2F;people&#x2F;dengxianbaitou" rel="noopener" target="_blank"><i class="fab fa-zhihu fa-fw"></i>Zhihu</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://www.yuque.com/jingzhi-knq0o" title="语雀 → https:&#x2F;&#x2F;www.yuque.com&#x2F;jingzhi-knq0o" rel="noopener" target="_blank"><i class="fas fa-link fa-fw"></i>语雀</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://juejin.cn/user/78820567684077" title="掘金 → https:&#x2F;&#x2F;juejin.cn&#x2F;user&#x2F;78820567684077" rel="noopener" target="_blank"><i class="fas fa-link fa-fw"></i>掘金</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://segmentfault.com/u/davidxiong" title="Segmentfault → https:&#x2F;&#x2F;segmentfault.com&#x2F;u&#x2F;davidxiong" rel="noopener" target="_blank"><i class="fas fa-link fa-fw"></i>Segmentfault</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 2017 – 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">熊敬之</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://mist.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Mist</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

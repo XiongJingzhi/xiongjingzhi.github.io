@@ -74,6 +74,7 @@
   </style>
 </noscript>
 
+  <meta name="referrer" content="no-referrer" />
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage">
@@ -157,6 +158,91 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://xiongjingzhi.com/2018/08/10/JS%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E5%AE%9E%E7%8E%B0/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="熊敬之">
+      <meta itemprop="description" content="日就月将，学有缉熙于光明。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="熊敬之">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2018/08/10/JS%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E5%AE%9E%E7%8E%B0/" class="post-title-link" itemprop="url">JS面向对象实现</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2018-08-10 07:18:54" itemprop="dateCreated datePublished" datetime="2018-08-10T07:18:54+00:00">2018-08-10</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2021-03-16 14:55:06" itemprop="dateModified" datetime="2021-03-16T14:55:06+00:00">2021-03-16</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="JS-语法前提"><a href="#JS-语法前提" class="headerlink" title="JS 语法前提"></a>JS 语法前提</h2><p>面向对象实现无非三个特征，封装，继承，多态。</p>
+<p>JS 实现基于构造函数（constructor）和原型链（prototype）。</p>
+<p>JavaScript 引擎先寻找对象本身的属性，如果找不到，就到它的原型去找，如果还是找不到，就到原型的原型去找。</p>
+<p>关于 this 知识：</p>
+<ul>
+<li>创建一个空对象，作为将要返回的对象实例。</li>
+<li>将这个空对象的原型，指向构造函数的 prototype 属性。</li>
+<li>将这个空对象赋值给函数内部的 this 关键字。</li>
+<li>开始执行构造函数内部的代码。</li>
+<li>if Constructor returns object, instanceObject will get the object, or else get ‘this object’.</li>
+</ul>
+<h2 id="JS-实现"><a href="#JS-实现" class="headerlink" title="JS 实现"></a>JS 实现</h2><p>构造函数实现封装：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">Person</span>(<span class="params">name, age</span>) </span>&#123;</span><br><span class="line">  <span class="comment">// 优先级最高</span></span><br><span class="line">  <span class="built_in">this</span>.name = name</span><br><span class="line">  <span class="built_in">this</span>.age = age</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// prototype 实例共享的属性和方法，节省内存</span></span><br><span class="line">Person.prototype.type = <span class="string">&#x27;human&#x27;</span></span><br><span class="line"></span><br><span class="line">Person.prototype.sayName = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="built_in">this</span>.name)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> instanceObject = <span class="keyword">new</span> Person(<span class="string">&#x27;张三&#x27;</span>, <span class="number">22</span>)</span><br></pre></td></tr></table></figure>
+<p>实现继承：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 构造继承</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">Student</span> (<span class="params">name, age, gender</span>) </span>&#123;</span><br><span class="line">  <span class="comment">// 借用构造函数继承属性成员</span></span><br><span class="line">  Person.call(<span class="built_in">this</span>, name, age)</span><br><span class="line">  <span class="comment">// 可以覆盖，重写</span></span><br><span class="line">  <span class="built_in">this</span>.gender = gender</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 复制父构造函数的原型对象</span></span><br><span class="line"><span class="comment">// 也可以使用Student.prototype = new Person()，但会有Person的实例属性</span></span><br><span class="line">Student.prototype = <span class="built_in">Object</span>.create(Person.prototype)</span><br><span class="line"><span class="comment">// 单个方法的继承</span></span><br><span class="line">|| Student.prototype.print = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123; Person.prototype.print.call(<span class="built_in">this</span>) &#125;</span><br><span class="line"><span class="comment">// 指定原型对象的构造函数</span></span><br><span class="line">Student.prototype.constructor = Student</span><br><span class="line"><span class="comment">// 可以覆盖，重写</span></span><br><span class="line">Student.prototype.method = <span class="string">&#x27;...&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> instanceObject = <span class="keyword">new</span> Student(<span class="string">&#x27;张三&#x27;</span>, <span class="number">22</span>, <span class="string">&#x27;man&#x27;</span>)</span><br><span class="line"><span class="comment">// 此时，instanceObject instanceof Student || Person 都为true</span></span><br></pre></td></tr></table></figure>
+<p>实现多重继承 Mixin：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">M1</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="built_in">this</span>.hello = <span class="string">&#x27;hello&#x27;</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">M2</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="built_in">this</span>.world = <span class="string">&#x27;world&#x27;</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">S</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  M1.call(<span class="built_in">this</span>)</span><br><span class="line">  M2.call(<span class="built_in">this</span>)</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 继承 M1</span></span><br><span class="line">S.prototype = <span class="built_in">Object</span>.create(M1.prototype)</span><br><span class="line"><span class="comment">// 继承链上加入 M2， 对象覆盖</span></span><br><span class="line"><span class="built_in">Object</span>.assign(S.prototype, M2.prototype)</span><br><span class="line"><span class="comment">// 指定构造函数</span></span><br><span class="line">S.prototype.constructor = S</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> s = <span class="keyword">new</span> S()</span><br><span class="line">s.hello <span class="comment">// &#x27;hello：&#x27;</span></span><br><span class="line">s.world <span class="comment">// &#x27;world&#x27;</span></span><br></pre></td></tr></table></figure>
+<h2 id="ES6-实现"><a href="#ES6-实现" class="headerlink" title="ES6 实现"></a>ES6 实现</h2><p>可以看作是 Syntactic sugar</p>
+<p>类的声明：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Person</span> </span>&#123;</span><br><span class="line">  <span class="function"><span class="title">constructor</span>(<span class="params">name, age</span>)</span> &#123;</span><br><span class="line">    <span class="built_in">this</span>.name = name</span><br><span class="line">    <span class="built_in">this</span>.age = age</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="function"><span class="title">sayName</span>(<span class="params"></span>)</span> &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="built_in">this</span>.name)</span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">this</span>.age</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>继承的实现：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Student</span> <span class="keyword">extends</span> <span class="title">Person</span> </span>&#123;</span><br><span class="line">  <span class="function"><span class="title">constructor</span>(<span class="params">name, age, gender</span>)</span> &#123;</span><br><span class="line">    <span class="comment">// super函数必不可少,调用父类的constructor(x, y)</span></span><br><span class="line">    <span class="comment">// 在es6内部实现中，子类的this必须通过父类的构造函数完成塑造</span></span><br><span class="line">    <span class="built_in">super</span>(name, age)</span><br><span class="line">    <span class="comment">// 由super返回了Student的实例，相当于Person.prototype.constructor.call(this)</span></span><br><span class="line">    <span class="built_in">this</span>.gender = gender</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="function"><span class="title">toString</span>(<span class="params"></span>)</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">this</span>.gender + <span class="string">&#x27; &#x27;</span> + <span class="built_in">super</span>.sayName() <span class="comment">// 调用父类的toString()</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> instanceObject = <span class="keyword">new</span> Student(<span class="string">&#x27;张三&#x27;</span>, <span class="number">22</span>, <span class="string">&#x27;man&#x27;</span>)</span><br><span class="line"><span class="comment">// instanceObject的__proto__指向Student的prototype, 有toString方法，</span></span><br><span class="line"><span class="comment">// 它的__proto__指向Person的prototype, 有sayName方法</span></span><br></pre></td></tr></table></figure>
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
     <link itemprop="mainEntityOfPage" href="https://xiongjingzhi.com/2018/08/02/HTML5-%E6%8B%96%E6%9B%B3%E4%B8%8A%E4%BC%A0/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -188,7 +274,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2021-01-11 01:35:13" itemprop="dateModified" datetime="2021-01-11T01:35:13+00:00">2021-01-11</time>
+                <time title="Modified: 2021-03-16 14:55:06" itemprop="dateModified" datetime="2021-03-16T14:55:06+00:00">2021-03-16</time>
               </span>
 
           
@@ -252,7 +338,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2021-01-11 01:35:13" itemprop="dateModified" datetime="2021-01-11T01:35:13+00:00">2021-01-11</time>
+                <time title="Modified: 2021-03-16 14:55:06" itemprop="dateModified" datetime="2021-03-16T14:55:06+00:00">2021-03-16</time>
               </span>
 
           
@@ -333,7 +419,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2021-01-11 01:35:13" itemprop="dateModified" datetime="2021-01-11T01:35:13+00:00">2021-01-11</time>
+                <time title="Modified: 2021-03-16 14:55:06" itemprop="dateModified" datetime="2021-03-16T14:55:06+00:00">2021-03-16</time>
               </span>
 
           
@@ -400,7 +486,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2021-01-11 01:35:13" itemprop="dateModified" datetime="2021-01-11T01:35:13+00:00">2021-01-11</time>
+                <time title="Modified: 2021-03-16 14:55:06" itemprop="dateModified" datetime="2021-03-16T14:55:06+00:00">2021-03-16</time>
               </span>
 
           
@@ -471,7 +557,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2021-01-11 01:35:13" itemprop="dateModified" datetime="2021-01-11T01:35:13+00:00">2021-01-11</time>
+                <time title="Modified: 2021-03-16 14:55:06" itemprop="dateModified" datetime="2021-03-16T14:55:06+00:00">2021-03-16</time>
               </span>
 
           
@@ -539,7 +625,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2021-01-11 01:35:13" itemprop="dateModified" datetime="2021-01-11T01:35:13+00:00">2021-01-11</time>
+                <time title="Modified: 2021-03-16 14:55:06" itemprop="dateModified" datetime="2021-03-16T14:55:06+00:00">2021-03-16</time>
               </span>
 
           
@@ -607,7 +693,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2021-01-11 01:35:13" itemprop="dateModified" datetime="2021-01-11T01:35:13+00:00">2021-01-11</time>
+                <time title="Modified: 2021-03-16 14:55:06" itemprop="dateModified" datetime="2021-03-16T14:55:06+00:00">2021-03-16</time>
               </span>
 
           
@@ -678,7 +764,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2021-01-11 01:35:13" itemprop="dateModified" datetime="2021-01-11T01:35:13+00:00">2021-01-11</time>
+                <time title="Modified: 2021-03-16 14:55:06" itemprop="dateModified" datetime="2021-03-16T14:55:06+00:00">2021-03-16</time>
               </span>
 
           
@@ -788,7 +874,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives">
         
-          <span class="site-state-item-count">28</span>
+          <span class="site-state-item-count">29</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
